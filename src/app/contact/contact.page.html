@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>contact</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-input class="input-fields" placeholder="Name:" type="text" name="name" [(ngModel)]="EmailContent.name"></ion-input>
+    <ion-input class="input-fields" placeholder="Email:" type="email" name="email" [(ngModel)]="EmailContent.emailAddress"></ion-input>
+    <ion-input class="input-fields" placeholder="Subject:" type="text" name="subject" [(ngModel)]="EmailContent.subject"></ion-input>
+    <ion-textarea class="input-fields" placeholder="Message" type="text" rows="7" cols="20" name="message" [(ngModel)]="EmailContent.message"></ion-textarea>
+
+    <ion-button class="send-btn" expand="block" (click)="sendEmail()">Send Message</ion-button>
+
+
+    <div class="address-part">
+        <h3 class="adrs-heading">Address</h3>
+        <p><i class="fa fa-map-marker"></i>
+            <span class="adrsdata">45 B Road NY. USA</span></p>
+        <p>
+            <i class="fa fa-phone"></i>
+            <a href="tel:+008 1234 6789"> <span class="adrsdata">+008 1234 6789</span></a>
+        </p>
+        <p>
+            <i class="fa fa-envelope"></i>
+            <a href="mailto:xyz@example.com"> <span class="adrsdata">xyz@example.com</span></a>
+        </p>
+    </div>
+</ion-content>

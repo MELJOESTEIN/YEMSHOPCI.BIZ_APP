@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>listinglocation</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item *ngFor="let loc of finalList">{{loc.name}}</ion-item>
+    </ion-list>
+    <ul>
+        <li *ngFor="let pagenum of totalPages">
+            <button id="next" (click)="nextPage(pagenum)">{{pagenum}}</button>
+        </li>
+    </ul>
+    <div style="height: 30%;width: 100%" id="map">
+    </div>
+</ion-content>

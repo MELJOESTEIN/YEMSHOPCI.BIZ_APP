@@ -1,0 +1,247 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ion-app>
+
+
+    <ion-content class="ion-padding-bottom">
+        <div class="header-item">
+
+            <img src="../../assets/listing-logo.png"/>
+            <i class="fa fa-user" (click)="loadLogin()"></i>
+            <div style="clear: both;"></div>
+            <div class="descrip-text">
+                <p>Browse Anything, Explore Lahore</p>
+            </div>
+            <ion-searchbar routerLink="/archive">
+
+            </ion-searchbar>
+        </div>
+        <div>
+            <div>
+                <h2 class="title-header">Categories</h2>
+                <ion-slides [options]="catsix">
+                    <ion-slide *ngFor="let cat of categories">
+                        <div class="category">
+      <span class="cat-img">
+    <img class="cat-img-s" src="{{cat.img}}"> </span>
+                            <p>{{cat.name}}</p>
+                        </div>
+                    </ion-slide>
+                </ion-slides>
+            </div>
+
+            <div>
+                <h2 class="title-header">Exclusive</h2>
+                <ion-slides [options]="exclusivepos">
+
+                    <ion-slide *ngFor="let excl of exculsive" (click)="gotoList()">
+                        <div class="thumb-overlay"></div>
+                        <img class="ex-img" src="{{excl.img}}"/>
+
+
+                        <div class="fields-pos">
+                    <span class="icon-pos-c">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i></span>
+                            <div *ngIf="excl.rating < 3.0">
+                                            <span class="listings-rating-danger"><i class="fa fa-star"
+                                                                                    aria-hidden="true"></i> {{excl.rating}}</span>
+                            </div>
+                            <div *ngIf="excl.rating >= 3.0">
+                        <span class="listings-rating"><i class="fa fa-star"
+                                                         aria-hidden="true"></i> {{excl.rating}}</span>
+                            </div>
+                            <div class="content-main">
+                                <span class="add-btn">Ad</span>
+                                <p style="font-size: 15px;">{{excl.cat}}</p>
+                                <p>$$$${{excl.name}}</p>
+                                <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{excl.city}}</span>
+                                    <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </ion-slide>
+
+                </ion-slides>
+            </div>
+
+
+            <div>
+                <h2 class="title-header">Popular Locations</h2>
+                <ion-slides class="populr-items-slider" [options]="locpos">
+                    <ion-slide *ngFor="let loc of locations">
+                        <div class="category">
+
+                            <img class="loc-img-s" src="{{loc.img}}"/>
+                            <p>{{loc.name}}</p>
+                            <p style="font-size: 12px">{{loc.listings}}</p>
+                        </div>
+                    </ion-slide>
+                </ion-slides>
+            </div>
+        </div>
+        <ion-card *ngIf="listings">
+            <div class="ion-margin-start">
+                <h2 class="title-header">Recent Listings</h2>
+
+                <div style="width: 100%; padding-bottom: 24px" class="category" (click)="gotoDetails(listings.listingId)"
+                     routerDirection="forward">
+
+                    <img src="{{listings[0].img}}" style="width: 100%;"/>
+                    <div class="listin-content">
+                        <div *ngIf="listings[0].rating < 3.0">
+                    <span class="down-listings-rating-danger " style="position: unset;"><i class="fa fa-star"
+                                                                                           aria-hidden="true"></i> {{listings[0].rating}}</span>
+                        </div>
+                        <div *ngIf="listings[0].rating >= 3.0">
+                    <span class="down-listings-rating" style="position: unset;"><i class="fa fa-star"
+                                                                                   aria-hidden="true"></i> {{listings[0].rating}}</span>
+                        </div>
+                        <p>{{listings[0].cat}}</p>
+                        <p style="font-size: 15px;">$$$$$-{{listings[0].name}}</p>
+                        <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{listings[0].city}}</span>
+                            <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                        </div>
+                    </div>
+
+                </div>
+                <ion-list class="listing-bottom" *ngFor="let list of listings | slice:1; let i = index">
+
+                    <div (click)="gotoDetails(list.listingId)" routerDirection="forward">
+                        <img src="{{list.img}}"/>
+                        <div class="listin-content-bottom">
+                            <div *ngIf="list.rating < 3.0">
+                    <span class="down-listings-rating-danger"><i class="fa fa-star"
+                                                                 aria-hidden="true"></i> {{list.rating}}</span>
+                            </div>
+                            <div *ngIf="list.rating >= 3.0">
+                    <span class="down-listings-rating"><i class="fa fa-star"
+                                                          aria-hidden="true"></i> {{list.rating}}</span>
+                            </div>
+
+                            <p>{{list.cat}}</p>
+                            <p style="font-size: 15px;">$$$$$-{{list.name}}</p>
+                            <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{list.city}}</span>
+                                <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </ion-list>
+
+            </div>
+        </ion-card>
+        <div class="tabs-layout">
+            <ion-segment [(ngModel)]="tabs" scrollable="true">
+
+                <ion-segment-button value="Hotels">
+                    HOTELS
+                </ion-segment-button>
+                <ion-segment-button value="Restaurants">
+                    RESTAURANTS
+                </ion-segment-button>
+                <ion-segment-button value="Nightlife">
+                    NIGHTLIFE
+                </ion-segment-button>
+                <ion-segment-button value="Services">
+                    SERVICE
+                </ion-segment-button>
+
+            </ion-segment>
+
+
+            <div [ngSwitch]="tabs">
+                <div *ngSwitchCase="'Hotels'">
+                    <ion-slides>
+                        <ion-slide *ngFor="let hotels of hotels" (click)="gotoDetails(listings.listingId)" routerDirection="forward">
+                            <ion-card class="hotels-items">
+
+                                <img src="{{hotels.img}}" style="width: 100%;"/>
+
+                                <div class="listin-content">
+                                    <div *ngIf="hotels.rating < 3.0">
+                    <span class="listings-rating-danger" style="position: unset;"><i class="fa fa-star"
+                                                                                     aria-hidden="true"></i> {{hotels.rating}}</span>
+                                    </div>
+                                    <div *ngIf="hotels.rating >= 3.0">
+                    <span class="listings-rating" style="position: unset;"><i class="fa fa-star"
+                                                                              aria-hidden="true"></i> {{hotels.rating}}</span>
+                                    </div>
+                                    <p>{{hotels.cat}}</p>
+                                    <p style="font-size: 15px;">$$$$$-{{hotels.name}}</p>
+                                    <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{hotels.city}}</span>
+                                        <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                                    </div>
+                                </div>
+
+                            </ion-card>
+                        </ion-slide>
+                    </ion-slides>
+                </div>
+
+                <div *ngSwitchCase="'Restaurants'">
+                    <div margin>
+                        This is Restaurants Page
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="'Nightlife'">
+                    <div margin>
+                        This is Nightlife Page
+                    </div>
+                </div>
+                <div *ngSwitchCase="'Services'">
+                    <div margin>
+                        This is Services Page
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </ion-content>
+    <ion-footer>
+        <div class="footer-app-view-new">
+            <div class="ion-left-btn" routerLink="/listinglocation" routerDirection="forward">
+                <i class="fa fa-map-marker"></i>
+                Directions
+            </div>
+            <div class="footer-center-btn">
+                <div class="center-btn-icon">
+
+                    <img src="../../assets/srch-btn.png" height="68" width="118"/></div>
+            </div>
+            <div class="ion-right-btn" routerLink="/contact" routerDirection="forward">
+                <i class="fa fa-envelope"></i>
+                Message
+            </div>
+            <ion-fab class="fab-home" horizontal="end" vertical="center" slot="fixed">
+                <ion-fab-button routerLink="/listing" color="primary">
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </div>
+    </ion-footer>
+</ion-app>
+

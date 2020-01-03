@@ -1,0 +1,234 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ion-header>
+
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <img src="../../assets/listing-logo.png" *ngIf="!isSearchBarOpned" routerLink="/home"/>
+        <ion-searchbar *ngIf="isSearchBarOpned" showCancelButton="true"
+                       (ionCancel)="isSearchBarOpned=false"></ion-searchbar>
+        <div class="srch-icon" *ngIf="!isSearchBarOpned" (click)="isSearchBarOpned=true">
+            <i class="fa fa-search"></i>
+        </div>
+        <div class="user-icon" (click)="loadLogin()" *ngIf="!isSearchBarOpned">
+            <i class="fa fa-user"></i>
+        </div>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding-bottom>
+    <div class="banner-content">
+
+        <div *ngIf="!listings.featuredImage">
+            <img src="../../assets/san fransisco.jpg"/>
+        </div>
+        <div *ngIf="listings.featuredImage">
+            <img *ngFor="let img of listings.featuredImage" [src]="img.path"/>
+        </div>
+        <div class="banner-items">
+            <span><i class="fa fa-star"></i>{{rating}}</span>
+            <p class="title">$$$$$ - {{listings.title}}</p>
+            <p class="detail">{{listings.category}}</p>
+
+        </div>
+        <div class="banner-buttons">
+            <section>
+                <button class="save-btn">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+
+                <button class="share-btn">
+                    <i class="fa fa-share"></i>
+                    Share
+                </button>
+
+            </section>
+
+        </div>
+        <button class="menu-btn">
+            <i class="fa fa-cutlery"></i>
+            View Menu
+        </button>
+    </div>
+    <div class="status-portion">
+        <p><span class="timing-icon"><i class="fa fa-clock-o"></i></span><b>Today</b><span
+                class="status">{{status}}</span><span (click)="loadTimings()"
+                class="drop-icon"><i
+                class="fa fa-caret-down"></i></span></p>
+    </div>
+        <ion-list class="schedule-list" *ngIf="schedule">
+
+            <ion-item-sliding class="timing-portion" *ngFor="let timing of schedule">
+              <span class="res-timing">{{timing.day}}--{{timing.startTime | date: 'shortTime'}}
+                  --{{timing.endTime | date: 'shortTime'}}</span>
+
+            </ion-item-sliding>
+        </ion-list>
+    <div class="promotion-portion">
+        <ion-card class="prom-card">
+            <div class="promotion"><p><span class="pencil-icon"><i class="fa fa-pencil"></i></span>{{promotion}}
+                OFF first two
+                person<span class="drop-icon"><i class="fa fa-caret-down"></i></span></p></div>
+        </ion-card>
+        <ion-card class="ann-card">
+            <div class="announcement"><p><span class="ann-icon"><i class="fa fa-bullhorn"></i></span>Quiz autemvel eum
+                iure
+                reprehenderit<span class="readmore">Read More</span></p></div>
+        </ion-card>
+    </div>
+    <div class="rating-portion" padding>
+        <h4 class="rating-headr">RATING</h4>
+        <p>
+            Rated {{rating}} out of 5.0 based on {{totalratings}} ratings.
+        </p>
+        <div class="rating-progress">
+            <ion-list>
+                <ion-list-header>
+                    <ion-label>Cleanliness</ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="primary" value="{{cleanliness}}"></ion-progress-bar>
+                <ion-list-header>
+                    <ion-label>
+                        Location
+                    </ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="secondary" value="{{location}}"></ion-progress-bar>
+                <ion-list-header>
+                    <ion-label>
+                        Taste
+                    </ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="warning" value="{{taste}}"></ion-progress-bar>
+                <ion-list-header>
+                    <ion-label>
+                        Service
+                    </ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="medium" value="{{Service}}"></ion-progress-bar>
+            </ion-list>
+        </div>
+        <div class="cirle-prgrs">
+            <circle-progress
+                    [percent]="65"
+                    [radius]="65"
+                    [outerStrokeWidth]="10"
+                    [outerStrokeColor]="'#00ff55'"
+                    [animation]="true"
+                    [showInnerStroke]="false"
+                    [showSubtitle]="false"
+                    [showImage]="false"
+                    [showUnits]="false"
+                    [title]="4.0"
+                    [animationDuration]="300">
+            </circle-progress>
+        </div>
+        <div style="clear: both;"></div>
+
+
+    </div>
+    <div class="rev-btn"><i class="fa fa-star"></i><span>Add Review</span></div>
+
+    <div class="info-div" margin-top>
+        <h4 padding>Information</h4>
+        <ion-list>
+            <ion-item>Price Range <b>${{listings.priceTo}}-${{listings.priceFrom}}</b></ion-item>
+            <ion-item><i class="fa fa-building"> </i>Own or Work Here? {{booking}}</ion-item>
+            <ion-item><i class="fa fa-globe"> </i>{{listings.website}}</ion-item>
+            <div *ngIf="listings.featuredImage">
+                <div *ngFor="let img of listings.featuredImage">
+
+                    <button class="fb-btn" (click)="shareWithFb(listings.title, img.path, listings.website)"><i
+                            class="fa fa-facebook"></i></button>
+                    <button class="tw-btn" (click)="shareWithTwitter(listings.title, img.path, listings.website)"><i
+                            class="fa fa-twitter"></i></button>
+                    <button class="pint-btn" (click)="shareWithPin(listings.title, img.path, listings.website)"><i
+                            class="fa fa-pinterest"></i></button>
+                </div>
+            </div>
+        </ion-list>
+
+    </div>
+    <div class="loc-portion">
+        <h4>Location</h4>
+        <div class="mapouter">
+            <div class="gmap_canvas">
+                <iframe id="gmap_canvas"
+                        src="https://maps.google.com/maps?q=lahore&t=&z=11&ie=UTF8&iwloc=&output=embed"
+                        frameborder="0"
+                        scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                <a href="https://www.embedgooglemap.net/blog/nordvpn-coupon-code/">noedvpn</a></div>
+        </div>
+    </div>
+    <div class="tabs-layout" margin-top>
+        <ion-segment [(ngModel)]="tabs" scrollable="true">
+
+            <ion-segment-button value="Description">
+                Description
+            </ion-segment-button>
+            <ion-segment-button value="Menu">
+                Menu
+            </ion-segment-button>
+            <ion-segment-button value="Events">
+                Events
+            </ion-segment-button>
+            <ion-segment-button value="Reviews">
+                Reviews
+            </ion-segment-button>
+
+        </ion-segment>
+
+
+        <div [ngSwitch]="tabs">
+            <div *ngSwitchCase="'Description'">
+                <div margin>
+                    {{listings.description}}
+                </div>
+            </div>
+
+            <div *ngSwitchCase="'Menu'">
+                <div margin>
+                    This is Menu Page
+                </div>
+            </div>
+
+            <div *ngSwitchCase="'Events'">
+                <div margin>
+                    This is Events Page
+                </div>
+            </div>
+            <div *ngSwitchCase="'Reviews'">
+                <div margin>
+                    This is Reviews Page
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</ion-content>
+<ion-footer>
+    <div class="footer-app-view-new">
+        <div class="ion-left-btn">
+            <i class="fa fa-map-marker"></i>
+            Directions
+        </div>
+        <div class="footer-center-btn">
+            <div class="center-btn-icon">
+
+                <img src="../../assets/srch-btn.png" height="68" width="118"/></div>
+        </div>
+        <div class="ion-right-btn">
+            <i class="fa fa-envelope"></i>
+            Message
+        </div>
+
+    </div>
+
+
+</ion-footer>
+
+
+

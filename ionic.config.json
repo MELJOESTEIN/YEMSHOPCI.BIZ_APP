@@ -1,0 +1,8 @@
+{
+  "name": "ListingApp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "5aa7f64c"
+}

@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button routerLink="/home" routerDirection="back"></ion-back-button>
+        </ion-buttons>
+        <ion-title>listingList</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list class="listing-bottom" *ngFor="let list of listings">
+
+        <ion-item [routerLink]="'/details/' + list.listingId" routerDirection="forward">
+            <div *ngIf="list.featuredImage">
+                <div *ngFor="let img of list.featuredImage">
+                    <img class="featured-img" src="{{img.path}}"/>
+                </div>
+            </div>
+            <div *ngIf="!list.featuredImage">
+
+
+                <img class="featured-img" src="../../assets/losangles.jpg"/>
+
+            </div>
+
+            <div class="listin-content-bottom">
+
+                    <span class="down-listings-rating-danger"><i class="fa fa-star"
+                                                                 aria-hidden="true"></i> 3.0</span>
+
+                <p>{{list.category}}</p>
+                <p style="font-size: 15px;">$$$$$-{{list.title}}</p>
+                <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{list.city}}</span>
+                    <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                </div>
+            </div>
+        </ion-item>
+
+    </ion-list>
+
+</ion-content>

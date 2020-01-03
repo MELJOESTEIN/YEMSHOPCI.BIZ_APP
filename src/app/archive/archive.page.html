@@ -1,0 +1,120 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ion-header>
+    <ion-toolbar color="primary">
+
+        <img src="../../assets/listing-logo.png" *ngIf="!isSearchBarOpned" routerLink="/home"/>
+        <ion-searchbar *ngIf="isSearchBarOpned" showCancelButton="true"
+                       (ionCancel)="isSearchBarOpned=false"></ion-searchbar>
+        <div class="srch-icon" *ngIf="!isSearchBarOpned" (click)="isSearchBarOpned=true">
+            <i class="fa fa-search"></i>
+        </div>
+        <div class="user-icon" (click)="loadLogin()" *ngIf="!isSearchBarOpned">
+            <i class="fa fa-user"></i>
+        </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div>
+        <h4 style="padding: 5px">Exclusive</h4>
+        <ion-slides [options]="exclusivepos">
+
+            <ion-slide *ngFor="let excl of exculsive" (click)="gotoDetails()" routerDirection="forward">
+                <div class="thumb-overlay"></div>
+                <img class="ex-img" src="{{excl.img}}">
+
+
+                <div class="fields-pos">
+                    <span class="icon-pos-c">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i></span>
+                    <div *ngIf="excl.rating < 3.0">
+                                            <span class="listings-rating-danger"><i class="fa fa-star"
+                                                                                    aria-hidden="true"></i> {{excl.rating}}</span>
+                    </div>
+                    <div *ngIf="excl.rating >= 3.0">
+                        <span class="listings-rating"><i class="fa fa-star"
+                                                         aria-hidden="true"></i> {{excl.rating}}</span>
+                    </div>
+                    <div class="content-main">
+                        <span class="add-btn">Ad</span>
+                        <p style="font-size: 15px;">{{excl.cat}}</p>
+                        <p>$$$${{excl.name}}</p>
+                        <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{excl.city}}</span>
+                            <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </ion-slide>
+
+        </ion-slides>
+    </div>
+
+    <div class="ion-margin-top ion-padding-start"  *ngIf="listings">
+
+        <ion-list class="listing-bottom" *ngFor="let list of listings">
+            <ion-item>
+                <div (click)="gotoDetails(list.listingId)" routerDirection="forward">
+                    <img src="{{list.img}}"/>
+                    <div class="listin-content-bottom">
+                        <div *ngIf="list.rating < 3.0">
+                    <span class="latest-listings-rating-danger"><i class="fa fa-star"
+                                                                   aria-hidden="true"></i> {{list.rating}}</span>
+                        </div>
+                        <div *ngIf="list.rating >= 3.0">
+                    <span class="latest-listings-rating"><i class="fa fa-star"
+                                                            aria-hidden="true"></i> {{list.rating}}</span>
+                        </div>
+
+                        <p>{{list.cat}}</p>
+                        <p style="font-size: 15px;">$$$$$-{{list.name}}</p>
+                        <div class="bottom-text">
+                            <span>
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{list.city}}</span>
+                            <span style="margin-left: 10px;"><i class="fa fa-phone" aria-hidden="true"></i>
+                            Call Now</span>
+                        </div>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+
+    </div>
+
+    <div class="distance-range">
+        <ion-item>
+            <ion-range min="0" max="500" pin color="primary">
+                <span slot="start">0</span>
+                <span slot="end">500</span>
+            </ion-range>
+        </ion-item>
+    </div>
+</ion-content>
+<ion-footer>
+    <div class="footer-app-view-new">
+        <div class="ion-left-btn">
+            <i class="fa fa-filter"></i>
+            Filter
+        </div>
+        <div class="footer-center-btn" (click)="gotoDetails()" routerDirection="forward">
+            <div class="center-btn-icon">
+
+                <img src="../../assets/srch-btn.png" height="68" width="118"/></div>
+        </div>
+        <div class="ion-right-btn">
+            <i class="fa fa-user"></i>
+            Map
+        </div>
+
+    </div>
+
+
+</ion-footer>
