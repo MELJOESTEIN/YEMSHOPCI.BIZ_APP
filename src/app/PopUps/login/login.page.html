@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<i class="fa fa-window-close fa-2x" style="text-align: end;" (click)="closeLoginPop()"></i>
+
+
+<ion-content>
+    <div>
+        <form>
+            <ion-grid>
+                <ion-row justify-content-center>
+                    <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+                        <div text-center>
+                            <h3><b>Login</b></h3>
+                        </div>
+                        <div class="ion-padding">
+                            <ion-item>
+                                <ion-input name="email" type="email" placeholder="Username or Email Address"
+                                           [(ngModel)]="UserData.username"
+                                           required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-input name="password" type="password" placeholder="Password"
+                                           [(ngModel)]="UserData.password"
+                                           required></ion-input>
+                            </ion-item>
+                        </div>
+                        <div class="ion-padding">
+                            <ion-item>
+                                <ion-checkbox color="primary" slot="start"
+                                              (ionChange)="saveLogin($event)"></ion-checkbox>
+                                <ion-label>Keep me Sign in</ion-label>
+                            </ion-item>
+                        </div>
+                        <div class="ion-padding">
+                            <ion-button size="large" type="submit" expand="block" (click)="loginUser()">Login
+                            </ion-button>
+                        </div>
+
+                        <div class="ion-padding">
+                            Not a member? <a (click)="loadRegisteration()">Sign up</a>
+                        </div>
+                        <div class="ion-padding" (click)="loadForgotPage()">
+                            Forgot Password
+                        </div>
+                        <div style="width: 100%">
+                            <ion-label class="login-fb-btn">Login With</ion-label>
+
+                            <ion-button class="login-fb-btn" size="small"
+                                        (click)="loginWithFacebook()">Facebook
+                            </ion-button>
+
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </form>
+    </div>
+<!--    <div *ngIf="data">-->
+<!--        <ion-item>-->
+<!--            {{data.user_obj.data.user_login}}-->
+<!--        </ion-item>-->
+<!--        <ion-item>-->
+<!--            {{data.user_obj.data.user_email}}-->
+<!--        </ion-item>-->
+<!--        <ion-item>-->
+<!--            <ion-button type="block" (click)="loggedoutUser()">Logout</ion-button>-->
+<!--        </ion-item>-->
+<!--    </div>-->
+
+</ion-content>

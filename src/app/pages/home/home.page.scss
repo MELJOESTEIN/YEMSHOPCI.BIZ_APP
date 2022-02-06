@@ -1,0 +1,412 @@
+
+.cat-img {
+  display: inline-block;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  width: 66px;
+  height: 66px;
+  text-align: center;
+  line-height: 66px;
+  background: linear-gradient(to right, rgba(72, 156, 234, 1) 0%, rgba(141, 106, 236, 1) 100%);
+}
+
+.category {
+  text-align: center;
+  display: block;
+  background-color: transparent;
+  border: 1px solid transparent;
+  margin-right: 10px;
+  margin-bottom: 1px;
+  float: left;
+}
+.page-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+h2 {
+  font-weight: 700;
+  color: #333;
+  font-size: 22px;
+}
+
+.cat-img-s {
+  margin-top: 15px;
+  height: 50%;
+  width: 50%;
+  border-radius: 3px !important;
+}
+
+
+.drp-data i {
+  color: white;
+}
+
+.loc-img-s {
+  height: 140px;
+  border-radius: 3px !important;
+}
+
+.fields-pos {
+  position: absolute;
+  z-index: 9999;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  color: white;
+
+}
+
+
+.exe-card-item {
+  background: #8a6aeba6;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.ex-img {
+  border-radius: 3px !important;
+  width: calc(100% - 25px);
+}
+
+.listing-app-view-new-rating {
+  position: absolute;
+  top: 15px;
+  right: 19px;
+  background: #fff;
+  color: green;
+  border: 1px solid green;
+  border-radius: 14px;
+  padding: 3px 5px;
+}
+
+.icon-pos-c {
+  position: absolute;
+  top: 19px;
+  left: 30px;
+}
+.icon-pos-c .fa {
+  color: white;
+}
+.side-menu-navigate {
+  float: left;
+
+
+}
+
+
+.content-main {
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  text-align: left;
+}
+
+.cat-name {
+  font-size: 3vw;
+  margin: 0px;
+  color: #7f7f7f;
+}
+
+.listing-loc {
+  font-size: 3vw;
+  white-space: nowrap;
+  margin: 0px;
+}
+.search-bar-scroll {
+  position: absolute;
+  z-index: 12;
+  height: 200px;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.add-btn {
+  font-weight: 400;
+  display: inline-block !important;
+  padding: 3px 8px;
+  line-height: 14px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  vertical-align: middle;
+  border: 1px solid #ff9703;
+  background-color: #ff9703;
+}
+
+.bottom-text {
+  font-size: 15px;
+  margin-top: 5px;
+  bottom: 5px;
+}
+
+.listin-content {
+  text-align: left;
+  margin-left: 14px;
+  padding-top: 18px;
+}
+
+
+.listing-bottom {
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+.listin-content-bottom {
+  float: left;
+  padding-left: 10px;
+  width: 70%;
+}
+
+.listing-bottom img {
+  width: 30%;
+  float: left;
+  border-radius: 3px !important;
+}
+
+.listin-content-bottom p {
+  margin-top: 0px;
+  margin-bottom: 8px;
+}
+
+.img-slide-pos {
+  margin-left: 7px
+}
+
+
+.down-listings-rating {
+  background: #fff;
+  color: #3ce272;
+  border: 1px solid #3ce272;
+  margin-right: 10px;
+  border-radius: 13px;
+  padding: 4px 8px;
+  text-align: center;
+  line-height: 21px;
+  font-size: 13px;
+  z-index: 10;
+  font-weight: 600;
+
+}
+
+.down-listings-rating-danger {
+  background: #fff;
+  color: red;
+  margin-right: 10px;
+  border: 1px solid red;
+  border-radius: 13px;
+  padding: 4px 8px;
+  text-align: center;
+  line-height: 21px;
+  font-size: 13px;
+  z-index: 10;
+  font-weight: 600;
+
+}
+
+.thumb-overlay {
+  background-color: #8a6aeba6;
+  position: absolute;
+  width: calc(100% - 25px);
+  height: 100%;
+  top: 0;
+  z-index: 999;
+  border-radius: 3px !important;
+}
+
+.footer-app-view-new {
+  background-color: #f4f4f4;
+  border: solid 1px #d6d6d6;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 11;
+  height: 8%;
+}
+
+.footer-app-view-new .footer-center-btn {
+  position: relative;
+}
+
+.scroll-content {
+  padding-bottom: 0 !important;
+}
+
+.center-btn-icon {
+  position: absolute;
+  width: 110px;
+  height: 63px;
+  left: 49%;
+  margin-left: -50px;
+  top: 0;
+  margin-top: -28px;
+  z-index: 10;
+}
+
+.toolbar-container {
+  background-color: #f4f4f4;
+}
+
+.ion-left-btn {
+  float: left;
+  position: absolute;
+  top: auto;
+  bottom: auto;
+  left: 3%;
+}
+
+.ion-right-btn {
+  float: left;
+  position: absolute;
+  top: auto;
+  bottom: auto;
+  right: 3%;
+}
+
+.ion-left-btn i {
+  color: #7870e8;
+  margin-right: 8px;
+  padding: 18px 0;
+}
+
+.ion-right-btn i {
+  color: #7870e8;
+  margin-right: 8px;
+  padding: 18px 0;
+}
+
+.ion-padding-bottom, [padding-bottom] {
+  --padding-bottom: var(--ion-padding, 38px);
+  padding-bottom: var(--ion-padding, 16px);
+}
+
+.tabs-layout {
+  width: 100%;
+  padding-bottom: 60px;
+  height: 75%;
+}
+
+.hotels-items {
+  padding: 20px 20px;
+  width: 100%;
+  position: relative;
+}
+
+.lp-blog-user-thumb {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  overflow: hidden;
+  margin-top: -25px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  display: inline-block;
+}
+
+.news-container {
+  overflow: hidden;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #e3e3e3;
+}
+
+.news-head {
+  margin-bottom: 30px;
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 10px;
+}
+
+.news-content {
+  background: #fff;
+  padding-bottom: 26px;
+  text-align: center;
+}
+
+.cat-news {
+  margin-top: 15px;
+}
+
+.cat-news p {
+  color: #363F48;
+}
+
+.news-title {
+  padding: 5px 0px 0px 0px;
+}
+
+.news-title h4 {
+  color: #333;
+}
+
+.lp-blog-grid-author {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lp-blog-grid-author li {
+  display: inline-block;
+  color: #333;
+  font-size: 13px;
+  margin-right: 25px;
+}
+
+.lp-blog-grid-author li i {
+  margin-right: 5px;
+}
+
+.my-custom-modal-css .modal-wrapper {
+  height: 20%;
+  top: 80%;
+  position: absolute;
+  display: block;
+}
+
+.title-header {
+  margin-left: 14px;
+}
+
+.populr-items-slider {
+  padding: 8px;
+}
+
+.fab-home {
+  position: absolute;
+  top: -17px;
+}
+
+.error-text {
+  text-align: center;
+  height:200px;
+}
+
+.lp-sub-title {
+  padding-bottom: 25px;
+  width: 100%;
+  padding-left: 15px;
+  line-height: 26px;
+  padding-right: 15px;
+  font-size: 16px;
+  margin: 0 auto;
+  color: #797979;
+  text-transform: capitalize;
+}
+.rating-content {
+  text-align: left;
+  position: absolute;
+  left: 12px;
+  bottom: -11px;
+}
+.tabs-upper-content{
+  position: relative;
+}

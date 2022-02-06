@@ -1,0 +1,281 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ion-app>
+    <app-toolbar></app-toolbar>
+    <ion-content [scrollX]="true">
+        <div *ngIf="listingsWithoutads != null || listingsWithads.length > 0">
+            <div *ngIf="loadStatus == 'success'" class="promo-links">
+                <h3>EXCLUSIVE</h3>
+                <ion-slides style="margin-top: 20px;" [options]="exclusivepos">
+
+                    <ion-slide *ngFor="let excl of listingsWithads" (click)="gotoDetails(excl.id)"
+                               routerDirection="forward">
+                        <div class="thumb-overlay"></div>
+                        <img class="ex-img" [src]="excl.featuredImage[0]"/>
+
+                        <div class="fields-pos">
+                                  <span class="icon-pos-c">
+                                  <i class="fa fa-heart-o" aria-hidden="true"></i></span>
+                            <div *ngIf="excl.rating">
+                                <div *ngIf="excl.rating < 3.0">
+                                                          <span class="listings-rating-danger"><i class="fa fa-star"
+                                                                                                  aria-hidden="true"></i> {{excl.rating}}</span>
+                                </div>
+                                <div *ngIf="excl.rating >= 3.0">
+                                      <span class="listings-rating"><i class="fa fa-star"
+                                                                       aria-hidden="true"></i> {{excl.rating}}</span>
+                                </div>
+                            </div>
+                            <div class="content-main">
+                                <span class="add-btn">Ad</span>
+                                <div *ngFor="let cat of excl.category">
+                                    <p class="ex-cat">{{replaceString(cat.name)}}</p>
+                                </div>
+                                <span class="ex-title">{{replaceSign(excl.title)}}</span>
+
+                                <span class="claimed" *ngIf="excl.claimed == 'claimed'"><i
+                                        class="fa fa-check"></i></span>
+                                <div class="bottom-text">
+                                <span *ngFor="let loc of excl.location" class="lp-exc-loc">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                    {{loc.name}}</span>
+                                    <span class="lp-exc-contact"><i class="fa fa-phone" aria-hidden="true"></i>
+                                Call Now</span>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </ion-slide>
+
+                </ion-slides>
+            </div>
+            <div class="ion-margin-top" style="margin-bottom: 100px;" *ngIf="loadStatus == 'success'">
+
+                <ion-list class="listing-bottom" *ngFor="let list of listingsWithoutads">
+                    <ion-item (click)="gotoDetails(list.id)" routerDirection="forward">
+                        <img *ngIf="list.featuredImage[0]" src="{{list.featuredImage[0]}}"/>
+                        <img *ngIf="!list.featuredImage[0]" src="../../assets/placeholder.png"/>
+                        <div class="listin-content-bottom">
+                            <div *ngIf="list.rating">
+                                <div *ngIf="list.rating < 3.0">
+                                          <span class="latest-listings-rating-danger" style="margin-right: 10px"><i
+                                                  class="fa fa-star"
+                                                  aria-hidden="true"></i> {{list.rating}}</span>
+                                </div>
+                                <div *ngIf="list.rating >= 3.0">
+                                          <span class="latest-listings-rating" style="margin-right: 10px"><i
+                                                  class="fa fa-star"
+                                                  aria-hidden="true"></i> {{list.rating}}</span>
+                                </div>
+                            </div>
+                            <div *ngFor="let cat of list.category">
+                                <p class="ex-cat" style="color: #797979;">{{replaceString(cat.name)}}</p>
+                            </div>
+                            <span class="ex-title" style="color: #797979;">{{replaceSign(list.title)}}</span>
+                            <span class="claimed" *ngIf="list.claimed == 'claimed'"><i class="fa fa-check"></i></span>
+                            <div class="bottom-text">
+                                            <span *ngFor="let loc of list.location">
+                                            <span class="lp-exc-loc" style="color: #797979;">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                                {{loc.name}}</span>
+                                                </span>
+                                <span class="lp-exc-contact" style="color: #797979;"><i class="fa fa-phone"
+                                                                                        aria-hidden="true"></i>
+                                            Call Now</span>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+
+            </div>
+            <div *ngIf="loadStatus == 'failed'">
+                <ion-skeleton-text animated
+                                   style="width: 60%; padding: 5px; margin-top: 30px; margin-left: 10px"></ion-skeleton-text>
+                <ion-card style="height: 180px; width: 85%">
+                    <ion-thumbnail style="height: 100px; width: 100%">
+                        <ion-skeleton-text></ion-skeleton-text>
+                    </ion-thumbnail>
+
+                    <ion-card-header>
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </ion-card-header>
+
+                    <ion-card-content>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </ion-card-content>
+
+                </ion-card>
+            </div>
+            <div *ngIf="loadStatus == 'failed'">
+                <ion-list>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-thumbnail slot="start">
+                            <ion-skeleton-text></ion-skeleton-text>
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>
+                                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                            </h3>
+                            <p>
+                                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            </p>
+                            <p>
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+            </div>
+            <div class="distance-range" *ngIf="showRadiusBar == true">
+                <ion-item>
+                    <ion-range min="0" max="500" pin color="primary">
+                        <span slot="start">0</span>
+                        <span slot="end">500</span>
+                    </ion-range>
+                </ion-item>
+            </div>
+        </div>
+        <div *ngIf="listingsWithoutads == null && listingsWithads.length == 0"
+             style="margin-top: 30px;display: inline-block;margin-bottom: 80px;text-align: center; width: 100%">
+            <h2 style="font-family: Quicksand;
+    color: #333;font-weight: 700;">
+                No Results
+            </h2>
+            <p class="no-data-error">Sorry! There are no listings matching your search.</p>
+            <p class="no-data-error">Try changing your search filters </p>
+        </div>
+    </ion-content>
+    <ion-footer>
+        <div class="footer-app-view-new">
+            <div class="ion-left-btn" (click)="loadFilters()">
+                <i class="fa fa-filter"></i>
+                Filter
+            </div>
+            <div class="footer-center-btn" routerDirection="forward" (click)="radiusShow()">
+                <div class="center-btn-icon">
+
+                    <img src="../../assets/mapMarker.jpg" height="68" width="118"/></div>
+            </div>
+            <div class="ion-right-btn">
+                <i class="fa fa-map-marker"></i>
+                Map
+            </div>
+
+        </div>
+    </ion-footer>
+</ion-app>

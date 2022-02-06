@@ -1,0 +1,472 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<app-toolbar></app-toolbar>
+
+<ion-content [scrollX]="true" *ngIf="listing">
+    <div class="banner-content" *ngIf="loadStatus== 'success'">
+
+        <div *ngIf="!listing.featured_Image">
+            <img src="https://via.placeholder.com/150" style="height: 275px"/>
+        </div>
+        <div style="position: relative" *ngIf="listing.featured_Image">
+            <div class="slide-img-overlay"></div>
+            <img [src]="listing.featured_Image"/>
+        </div>
+        <div class="banner-items">
+            <span class="detail_rating" *ngIf="listing.rating"><i class="fa fa-star"></i>{{listing.rating}}</span>
+            <div class="inner_title"><span>{{title}}</span>
+                <span class="claimed" style="margin-left: 4px;
+    margin-bottom: 3px;" *ngIf="listing.claim_Status == 'claimed'"><i class="fa fa-check"></i></span>
+            </div>
+            <p class="detail">{{categoryName}}</p>
+
+        </div>
+        <div class="banner-buttons">
+            <section>
+                <button class="save-btn" (click)="favouriteListing()">
+                    <i class="fa fa-save"></i>
+                    <span *ngIf="!buttonColor" style="margin-left: 8px;">Save</span>
+                    <span *ngIf="buttonColor" style="margin-left: 8px;">{{buttonColor}}</span>
+                </button>
+
+
+                <button class="share-btn" (click)="loadSocial()">
+                    <i class="fa fa-share"></i>
+                    Share
+                </button>
+
+            </section>
+
+        </div>
+    </div>
+    <div *ngIf="loadStatus == 'failed'">
+        <app-skelten></app-skelten>
+    </div>
+    <div *ngIf="listing.business_hours">
+        <div class="status-portion" (click)="loadTimings()">
+            <p><span class="timing-icon"><i class="fa fa-clock-o"></i></span><b>Today</b><span
+                    class="status"></span>
+                <span class="drop-icon"><i
+                        class="fa fa-caret-down"></i></span></p>
+
+        </div>
+        <ion-list class="schedule-list" *ngIf="schedule">
+            <div class="timing-portion">
+                <span *ngIf="getKeys(schedule)">
+                    <div *ngFor="let key of keys">
+                        <ion-item class="res-timing">
+                            <span>{{key}}</span>   <span
+                                style="margin-right: 0px; margin-left: auto">{{schedule[key].open}}
+                            - {{schedule[key].close}}</span>
+                        </ion-item>
+                    </div>
+
+                </span>
+
+
+            </div>
+        </ion-list>
+    </div>
+    <div *ngIf="listing.discounts">
+        <ion-card class="prom-card">
+            <ion-card-header (click)="hideDiscount()" class="promotion"><p><span class="pencil-icon"><i
+                    class="fa fa-pencil"></i></span>Discounts<span class="drop-icon"><i
+                    class="fa fa-caret-down"></i></span></p></ion-card-header>
+
+
+        </ion-card>
+        <div *ngIf="dis">
+            <div style="padding: 13px;
+    border-bottom: 1px solid;" *ngFor="let discount of listing.discounts">
+
+                <strong style="display: block;
+    padding: 15px;">{{discount.disHea}}</strong>
+                <a *ngIf="dis" class="deal-button" target="_blank"><i class="fa fa-gavel"></i>{{discount.disBT}}</a>
+
+            </div>
+        </div>
+    </div>
+    <div *ngIf="listing.announcements">
+        <ion-card class="ann-card">
+            <div class="announcement" (click)="hideAnn()"><p><span class="ann-icon"><i
+                    class="fa fa-bullhorn"></i></span>Announcements<span class="readmore">Read More</span></p></div>
+        </ion-card>
+
+        <div *ngIf="ann">
+            <div *ngFor="let snn of listing.announcements">
+
+                <div class="lp-listing-announcement">
+                    <div class="announcement-wrap">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        <p>
+                            <strong>{{snn.annTI}}</strong>
+                            <span>{{snn.annMsg}}</span>
+                        </p>
+                        <a target="_blank" [href]="snn.annBL" class="announcement-btn">{{snn.annSt}}</a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rating-portion ion-padding">
+        <h4 class="rating-headr">RATING</h4>
+        <p *ngIf="listing.rating">
+            Rated {{listing.rating}} out of 5.0 based on {{totalratings}} ratings.
+        </p>
+        <div class="rating-progress">
+            <ion-list>
+                <ion-list-header>
+                    <ion-label>Cleanliness</ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="primary" value="{{cleanliness}}"></ion-progress-bar>
+                <ion-list-header>
+                    <ion-label>
+                        Location
+                    </ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="secondary" value="{{location}}"></ion-progress-bar>
+                <ion-list-header>
+                    <ion-label>
+                        Taste
+                    </ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="warning" value="{{taste}}"></ion-progress-bar>
+                <ion-list-header>
+                    <ion-label>
+                        Service
+                    </ion-label>
+                </ion-list-header>
+                <ion-progress-bar color="medium" value="{{Service}}"></ion-progress-bar>
+            </ion-list>
+        </div>
+        <div class="cirle-prgrs" *ngIf="listing.rating > 0">
+            <circle-progress
+                    [percent]="(listing.rating / 5) * 100"
+                    [radius]="(listing.rating / 5) * 100"
+                    [outerStrokeWidth]="10"
+                    [outerStrokeColor]="'#00ff55'"
+                    [animation]="true"
+                    [showInnerStroke]="false"
+                    [showSubtitle]="false"
+                    [showImage]="false"
+                    [showUnits]="false"
+                    [title]="listing.rating"
+                    [animationDuration]="300">
+            </circle-progress>
+        </div>
+        <div style="clear: both;"></div>
+
+
+    </div>
+    <div class="rev-btn" (click)="hide()">
+        <i class="fa fa-star"></i><span>Add Review</span>
+
+    </div>
+    <div class="review-section ion-padding">
+        <app-expandable [expandHeight]="'400px'" [expanded]="hideMe">
+            <ion-label class="ion-margin-top">Your rating for this Listing</ion-label>
+            <ionic4-star-rating class="ion-margin-top" #rating
+                                activeIcon="star"
+                                defaultIcon="star-outline"
+                                activeColor="#488aff"
+                                defaultColor="#f4f4f4"
+                                readonly="false"
+                                rating="0"
+                                fontSize="32px"
+                                (ratingChanged)="logRatingChange($event)">
+            </ionic4-star-rating>
+            <ion-label class="city-label ion-margin">Title</ion-label>
+            <ion-input type="text" class='city-title ion-margin' placeholder="title"
+                       [(ngModel)]="Review.post_title"></ion-input>
+            <ion-label class="city-label ion-margin">Review</ion-label>
+            <ion-textarea type="text" class="desc-text" rows="6" cols="20"
+                          [(ngModel)]="Review.post_content"></ion-textarea>
+
+            <ion-button type="primary" (click)="addReview()">Submit</ion-button>
+        </app-expandable>
+    </div>
+
+    <div class="info-div ion-margin-top">
+        <h4 class="ion-padding">Information</h4>
+        <ion-list>
+            <ion-item *ngIf="listing.Phone"><i class="fa fa-phone"> </i><span
+                    style="margin-left: 6px;">{{listing.Phone}}</span></ion-item>
+            <ion-item *ngIf="listing.listingpfrom && listing.listingpTo">Price Range <b
+                    style="margin-left: 6px;">${{listing.listingpfrom}}-${{listing.listingpTo}}</b>
+            </ion-item>
+            <ion-item><i class="fa fa-building"> </i><span style="margin-left: 6px;">Own or Work Here? </span><a
+                    class="report-submit" (click)="hideClaim()">Claim Now!</a></ion-item>
+
+            <ion-item *ngIf="listing.website" tappable href="{{listing.website}}"><i class="fa fa-globe"> </i><span
+                    style="margin-left: 6px;">{{listing.website}}</span></ion-item>
+            <ion-item><i class="fa fa-flag"> </i><span style="margin-left: 6px;">See something wrong? </span><a
+                    class="report-submit" (click)="submitReport()">Report Now</a></ion-item>
+            <div class="ion-margin">
+                <app-expandable [expanded]="claimhide" [expandHeight]="'500px'">
+                    <b>Claim This Listing</b>
+                    <ion-input class="input-fields" placeholder="First Name:" type="text" name="firstname"
+                               [(ngModel)]="Claim.firstname"></ion-input>
+                    <ion-input class="input-fields" placeholder="Last Name" type="text" name="lastname"
+                               [(ngModel)]="Claim.lastname"></ion-input>
+                    <ion-input class="input-fields" placeholder="Business Email" type="text" name="bemail"
+                               [(ngModel)]="Claim.bemail"></ion-input>
+                    <ion-input class="input-fields" placeholder="111-111-234" type="text" name="phone"
+                               [(ngModel)]="Claim.phone"></ion-input>
+
+                    <ion-textarea class="input-fields" placeholder="Message" type="text" rows="7" cols="20"
+                                  name="message"
+                                  [(ngModel)]="Claim.message"></ion-textarea>
+                    <input type="file" name="claim_attachment" class="__web-inspector-hide-shortcut__">
+                    <ion-button class="ion-margin-top" (click)="submitClaim()">Send Message</ion-button>
+                </app-expandable>
+            </div>
+            <div>
+
+                <button class="fb-btn"
+                        (click)="openLink(listing.Facebook)">
+                    <i class="fa fa-facebook"></i></button>
+                <button class="tw-btn"
+                        (click)="openLink(listing.Twitter)">
+                    <i class="fa fa-twitter"></i></button>
+                <button class="tw-btn"
+                        (click)="openLink(listing.Linkedin)">
+                    <i class="fa fa-linkedin"></i></button>
+                <button class="pint-btn"
+                        (click)="openLink(listing.Youtube)">
+                    <i class="fa fa-youtube"></i></button>
+                <button class="tw-btn"
+                        (click)="openLink(listing.Instagram)">
+                    <i class="fa fa-instagram"></i></button>
+            </div>
+        </ion-list>
+
+    </div>
+
+    <div style="height: 30%;width: 100%" id="map">
+    </div>
+
+
+    <div class="tabs-layout ion-margin-top">
+        <ion-segment [(ngModel)]="tabs" scrollable="true">
+
+            <ion-segment-button *ngIf="description" value="Description">
+                Description
+            </ion-segment-button>
+            <ion-segment-button *ngIf="listing.menu" value="Menu">
+                Menu
+            </ion-segment-button>
+            <ion-segment-button *ngIf="events.length > 0" value="Events">
+                Events
+            </ion-segment-button>
+            <ion-segment-button *ngIf="listing.faqs" value="Faqs">
+                FAQS
+            </ion-segment-button>
+            <ion-segment-button *ngIf="reviews.length > 0" value="Reviews">
+                Reviews
+            </ion-segment-button>
+
+        </ion-segment>
+
+
+        <div [ngSwitch]="tabs" style="margin-bottom: 120px">
+            <div *ngIf="description">
+                <div class="desc-content" *ngSwitchCase="'Description'">
+                    <div>
+                        {{description}}
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="listing.menu">
+                <div class="ion-margin desc-content" *ngSwitchCase="'Menu'">
+
+
+                    <div *ngIf="getmenu(listing.menu)">
+                        <div *ngFor="let sub of menu">
+                            <div class="menu-portion">
+                                <p><b>{{sub}}</b><span
+                                        class="status"></span>
+                                    <span (click)="hideData()" class="drop-icon"><i
+                                            class="fa fa-caret-down"></i></span></p>
+
+                            </div>
+                            <app-expandable [expanded]="hideMe" class="group-heading">
+                                <div *ngIf="getsubmenu(listing.menu[sub])">
+                                    <div *ngFor="let mn of menudata">
+                                        <p><b>{{mn}}</b><span
+                                                class="status"></span>
+                                            <span (click)="hideHeading()" class="drop-icon"><i
+                                                    class="fa fa-caret-down"></i></span></p>
+                                        <div *ngIf="getsubmenuData(listing.menu[sub][mn])">
+                                            <div *ngFor="let sbmn of submnuData">
+                                                <app-expandable [expanded]="hideHd" class="appview-menu-item">
+
+                                                    <div class="menu-item-thumb">
+                                                        <img [src]="sbmn.mImage"/>
+                                                    </div>
+                                                    <div class="menu-item-detail ">
+                                                        <p> {{sbmn.mTitle}}</p>
+                                                        <p> {{sbmn.mDetail}}</p>
+                                                    </div>
+                                                    <p>{{sbmn.mOldPrice}}</p>
+                                                    <p>{{sbmn.mNewPrice}}</p>
+                                                </app-expandable>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </app-expandable>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div *ngIf="events.length > 0">
+                <div class="desc-content" *ngSwitchCase="'Events'">
+                    <div *ngFor="let events of listing.events">
+                        <div class="lp-event-image-container">
+                            <div class="lp-event-image-overlay">
+
+                            </div>
+                            <div class="lp-event-author-listing">
+
+                                <img *ngIf="events.author_img" [src]="events.author_img" class="author-img"/>
+
+                                <img *ngIf="!events.author_img" [src]="events.evnt_img" class="author-img"/>
+
+                                <span>Hosted by <br> {{title}}</span>
+                            </div>
+                            <img [src]="events.evnt_img">
+
+                        </div>
+                        <div class="lp-event-outer-container">
+                            <div class="lp-event-outer-content">
+
+                                <div class="lp-evnt-date-container">
+                                    <div class="lp-evnt-date-container-inner">
+                                        <span>{{events.start_date}}</span>
+                                        <span>{{events.start_month}}</span>
+                                    </div>
+
+                                </div>
+                                <div class="lp-evnt-content-container">
+                                    <a>{{events.title}}</a>
+                                    <ul class="lp-event-venue">
+                                        <li><span><i class="fa fa-clock-o" aria-hidden="true"
+                                                     style="color: #06ff00; margin-right: 6px;"></i>{{events.Start_time}}
+                                            -{{events.start_date_full}}</span></li>
+                                        <li><span><i class="fa fa-clock-o" aria-hidden="true"
+                                                     style="color: #ff0002; margin-right: 6px;"></i>{{events.Ending_time}}
+                                            -{{events.end_date_full}}</span>
+                                        </li>
+                                        <li><span><i class="fa fa-map-marker"
+                                                     aria-hidden="true"
+                                                     style="margin-right: 6px;"></i>{{events.location}}</span></li>
+
+                                    </ul>
+                                </div>
+                               <ion-row class="ion-padding-top ion-padding-bottom">
+                                   <ion-col size="4">0 Attendees</ion-col>
+                                   <ion-col offset="4" style="text-align: end;">GOING?</ion-col>
+                               </ion-row>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="ion-margin" *ngIf="listing.faqs">
+                <div class="desc-content" *ngSwitchCase="'Faqs'">
+                    <ion-list>
+
+
+                        <div *ngFor="let que of listing.faqs">
+                            <div (click)="expandItem()"><span class="question-icon">Q</span> <span
+                                    class="ques">{{que.faq}}</span> <span class="header-icon fa fa-plus"></span></div>
+                            <app-expandable expandHeight="200px" [expanded]="expanded"> {{que.faqans}} </app-expandable>
+                        </div>
+
+
+                    </ion-list>
+                </div>
+            </div>
+            <div class="ion-margin" *ngIf="reviews">
+                <div *ngSwitchCase="'Reviews'">
+
+                    <ion-list class="comments-section">
+                        <div *ngFor="let rev of reviews" class="single-comment">
+                            <div>
+                                <div class="review-img"><img [src]="rev.author_pic"/></div>
+                                <div class="up-content">
+                                    <h3>{{rev.comment_title}}</h3>
+                                    <p>10-20-2020</p>
+                                    <ionic4-star-rating #rating
+                                                        activeIcon="star"
+                                                        defaultIcon="star-outline"
+                                                        activeColor="#488aff"
+                                                        defaultColor="#f4f4f4"
+                                                        readonly="true"
+                                                        rating="{{rev.rating}}"
+                                                        fontSize="22px">
+                                    </ionic4-star-rating>
+                                </div>
+                            </div>
+                            <div class="rev-lower-sec">
+                                <p>{{rev.comment_content}}</p>
+                                <div class="bottom-section">
+                                    <p>was this review</p>
+                                    <ul class="rev-btns">
+                                        <li><a class="instresting"
+                                               (click)="submitReact(rev.id, rev.interest, 'Interesting')"> <i
+                                                class="fa fa-thumbs-o-up"></i><span
+                                                class="lp_state"></span>Interesting<span
+                                                class="interests-score">{{rev.interest}}</span></a></li>
+
+                                        <li><a class="lol" (click)="submitReact(rev.id, rev.lols, 'Lol')"> <i
+                                                class="fa fa-smile-o"></i>Lol<span
+                                                class="interests-score">{{rev.lols}}</span>
+                                            <span class="lp_state"></span></a></li>
+                                        <li><a class="love" (click)="submitReact(rev.id, rev.loves, 'Love')"> <i
+                                                class="fa fa-heart-o"></i>Love<span
+                                                class="interests-score">{{rev.loves}}</span>
+                                            <span class="lp_state"></span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-list>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</ion-content>
+<ion-footer>
+    <div class="footer-app-view-new">
+        <div class="ion-left-btn" (click)="openDirections()">
+            <i class="fa fa-map-marker"></i>
+            Directions
+        </div>
+        <div class="footer-center-btn" (click)="makeCall()">
+            <div class="center-btn-icon">
+
+                <img src="../../assets/callbtn.png" height="68" width="118"/></div>
+        </div>
+        <div class="ion-right-btn" (click)="gotoContact()">
+            <i class="fa fa-envelope"></i>
+            Message
+        </div>
+
+    </div>
+
+
+</ion-footer>
+
+
+

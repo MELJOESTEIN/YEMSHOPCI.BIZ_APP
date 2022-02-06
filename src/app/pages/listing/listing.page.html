@@ -1,0 +1,326 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<app-toolbar></app-toolbar>
+<ion-content style="--background: #eff3f6">
+    <div *ngIf="pricingPlans" class="ion-margin" style="background: white; border-radius: 10px;">
+        <div class="ion-margin-top ion-padding">
+            <div class="help-text"><a class="help" style="margin-top: 1px"><i class="fa fa-question"></i> </a></div>
+            <ion-label class="title-label">Listing Title*</ion-label>
+            <ion-input type="text" class='listing-title' placeholder="Staple and Fancy Hotel" name="title"
+                       [(ngModel)]="Listing.post_title"></ion-input>
+            <div *ngIf="pricingPlans.includes('Business Tagline')">
+                <ion-input type="text" class='listing-title' placeholder="Tagline Example Best Express Maxican Grill"
+                           name="tagline_text"
+                           [(ngModel)]="Listing.tagline_text"></ion-input>
+            </div>
+        </div>
+
+        <div class="ion-margin-top">
+            <div class="ion-padding" *ngIf="pricingPlans.includes('Map Display')">
+                <ion-label class="city-label">City</ion-label>
+                <div class="help-text"><a class="help"><i class="fa fa-question"></i> </a></div>
+                <ion-input type="text" class='city-title' placeholder="select your listing region" name="city"
+                           [(ngModel)]="Listing.location"></ion-input>
+            </div>
+            <div class="tabs-layout ion-margin-top">
+                <ion-segment [(ngModel)]="tabs" scrollable="true">
+
+                    <ion-segment-button value="Search By Google">
+                        Search By Google
+                    </ion-segment-button>
+                    <ion-segment-button value="Manual Coordinates">
+                        Manual Coordinates
+                    </ion-segment-button>
+                </ion-segment>
+
+
+                <div [ngSwitch]="tabs">
+                    <div *ngSwitchCase="'Search By Google'">
+                        <div class="ion-margin">
+                            <ion-label class="city-label">Full Address(Geolocation)</ion-label>
+                            <ion-input type="text" class='city-title' [(ngModel)]="autocomplete.input"
+                                       (ionInput)="updateSearchResults()"
+                                       placeholder="Start typing and find your place in google map"></ion-input>
+                            <ion-list [hidden]="autocompleteItems.length == 0">
+                                <ion-item *ngFor="let item of autocompleteItems" tappable
+                                          (click)="selectSearchResult(item)">
+                                    {{ item.description }}
+                                </ion-item>
+                            </ion-list>
+
+
+                        </div>
+                    </div>
+
+                    <div *ngSwitchCase="'Manual Coordinates'">
+                        <div class="ion-margin">
+                            <ion-label class="city-label">Add Custom Address</ion-label>
+                            <ion-input type="text" class='city-title' [(ngModel)]="Listing.gAddresscustom"
+                                       placeholder="Add Address here"></ion-input>
+                            <ion-row>
+                                <ion-col offset="4">
+                                    <ion-label class="city-label">Longitude</ion-label>
+                                    <ion-input type="text" class='city-title' [(ngModel)]="Listing.latitude"
+                                               placeholder="40.2312412"></ion-input>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-label class="city-label">Latitude</ion-label>
+                                    <ion-input type="text" class='city-title' [(ngModel)]="Listing.longitude"
+                                               placeholder="-74.9832982"></ion-input>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="ion-padding">
+                <div *ngIf="pricingPlans.includes('Contact Display')">
+                    <ion-label class="city-label">Phone</ion-label>
+                    <ion-input type="number" class='city-title' placeholder="111-111-123" name="phone"
+                               [(ngModel)]="Listing.phone"></ion-input>
+                </div>
+                <div *ngIf="pricingPlans.includes('Website')">
+                    <ion-label class="city-label ion-margin">Website</ion-label>
+                    <ion-input type="text" class='city-title' placeholder="http://" name="website"
+                               [(ngModel)]="Listing.website"></ion-input>
+                </div>
+            </div>
+        </div>
+
+        <div class="ion-margin-top" *ngIf="pricingPlans.includes('Business Hours')">
+            <ion-list>
+                <ion-label class="timing-label ion-padding">Add Business Hours</ion-label>
+                <ion-select name="day" [(ngModel)]="dayname" [selectedText]="dayname" class="days-dropdwn">
+                    <ion-select-option selected>Monday</ion-select-option>
+                    <ion-select-option>Tuesday</ion-select-option>
+                    <ion-select-option>Wednesday</ion-select-option>
+                    <ion-select-option>Thursday</ion-select-option>
+                    <ion-select-option>Friday</ion-select-option>
+                    <ion-select-option>Saturday</ion-select-option>
+                    <ion-select-option>Sunday</ion-select-option>
+                </ion-select>
+                <ion-item>
+                    <ion-label>Start Time</ion-label>
+                    <ion-datetime [disabled]="checkedbtn" displayFormat="h:mm a" pickerFormat="h:mm a" value="07:43"
+                                  [(ngModel)]="strattime"></ion-datetime>
+                </ion-item>
+                <ion-item>
+                    <ion-label>End Time</ion-label>
+                    <ion-datetime [disabled]="checkedbtn" displayFormat="h:mm a" pickerFormat="h:mm a" value="07:43"
+                                  [(ngModel)]="etime"></ion-datetime>
+                </ion-item>
+            </ion-list>
+            <ion-list [hidden]="!timings">
+                <ion-item *ngFor="let time of timings ; index as pos">
+                    <ion-grid>
+                        <ion-row *ngIf="time.open && time.close">
+                            <ion-col>
+                                <div>{{ time.day}}</div>
+                            </ion-col>
+                            <ion-col>
+                                <div>{{ time.open }}</div>
+                            </ion-col>
+                            <ion-col>
+                                <div>{{ time.close }}</div>
+                            </ion-col>
+                            <ion-col>
+                                <div (click)="deleteTime(time)" class="listing-time-delete">Remove</div>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row *ngIf="!time.open || !time.close">
+                            <ion-col>
+                                <div>{{ time.day}}</div>
+                            </ion-col>
+                            <ion-col>
+                                <div>{{ time.allTime }}</div>
+                            </ion-col>
+                            <ion-col>
+                                <div (click)="deleteTime(time)" class="listing-time-delete">Remove</div>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-item>
+               <ion-item>
+                   <span class="chkbx-cnfrm"><ion-checkbox [(ngModel)]="checkedbtn" (ionChange)="onTimeCheckbox($event)"></ion-checkbox></span>
+                   <span class="cnfirmtin">24 hours</span>
+               </ion-item>
+            </ion-list>
+            <ion-button (click)="addListingTime()" class="ion-margin">Add timing</ion-button>
+
+
+        </div>
+
+        <div class="category-list ion-padding">
+            <ion-label class="timing-label">Category *</ion-label>
+            <ion-select name="category" [(ngModel)]="Listing.category" [selectedText]="Listing.category">
+
+                <ion-select-option class="city-title" *ngFor="let cat of listingCategories;"
+                                   [value]="replaceSign(cat.name)">{{replaceSign(cat.name)}}</ion-select-option>
+            </ion-select>
+
+        </div>
+
+        <div class="price-range-list ion-padding" *ngIf="pricingPlans.includes('Price Range')">
+            <ion-label class="timing-label">Price Range</ion-label>
+            <ion-select name="pricerange" [(ngModel)]="Listing.price_status" [selectedText]="Listing.price_status">
+                <ion-select-option class="city-title" *ngFor="let pr of priceRange; index as i"
+                                   [value]="pr">{{pr}}</ion-select-option>
+            </ion-select>
+            <ion-label class="city-label">Price From</ion-label>
+            <ion-input type="number" class='city-title' placeholder="Price From" name="priceFrom"
+                       [(ngModel)]="Listing.priceFrom"></ion-input>
+            <ion-label class="city-label">Price to</ion-label>
+            <ion-input type="number" class='city-title' placeholder="Price to" name="priceTo"
+                       [(ngModel)]="Listing.priceTo"></ion-input>
+        </div>
+
+        <div class="descrptn-portion ion-padding">
+            <ion-label class="timing-label">Description*</ion-label>
+            <ion-textarea type="text" class="desc-text" rows="6" cols="20" name="description"
+                          [(ngModel)]="Listing.post_content"></ion-textarea>
+        </div>
+
+        <div *ngIf="pricingPlans.includes('FAQ')">
+            <div [ngSwitch]="faqsTab" class="ion-padding">
+                <div *ngFor="let att of faqArray; let idx = index">
+                    <div *ngSwitchCase=idx>
+                        <ion-label class="city-label">FAQ{{idx + 1}}</ion-label>
+                        <ion-input type="text" class='city-title' placeholder="Faq" [(ngModel)]="faqArray[idx].faq"
+                                   name="{{faqArray[idx].faq}}"></ion-input>
+                        <ion-textarea rows="5" cols="20" class='desc-text' [(ngModel)]="faqArray[idx].faqans"
+                                      name="{{faqArray[idx].faqans}}"
+                                      placeholder="Answer"></ion-textarea>
+                    </div>
+                </div>
+
+
+            </div>
+            <ion-segment [(ngModel)]="faqsTab" scrollable="true">
+
+                <ion-segment-button *ngFor="let att of faqArray; let idx = index" value="{{idx}}">
+                    <div class="btns-faqs">
+                        Faq{{idx + 1}}
+                    </div>
+                </ion-segment-button>
+            </ion-segment>
+
+
+            <button class="add-btn" (click)="addFaq()"><i class="fa fa-plus"></i></button>
+        </div>
+        <div class="social-content ion-padding" *ngIf="pricingPlans.includes('Social Links')">
+            <ion-input type="text" class='city-title' placeholder="Your Twitter URL" name="twitterUrl"
+                       [(ngModel)]="Listing.twitter"></ion-input>
+            <ion-input type="text" class='city-title' placeholder="Your Facebook URL" name="facebookUrl"
+                       [(ngModel)]="Listing.facebook"></ion-input>
+            <ion-input type="text" class='city-title' placeholder="Your LinkedIn URL" name="linkedInUrl"
+                       [(ngModel)]="Listing.linkedin"></ion-input>
+            <ion-input type="text" class='city-title' placeholder="Your Google Plus URL" name="googlePlusUrl"
+                       [(ngModel)]="Listing.google_plus"></ion-input>
+            <ion-input type="text" class='city-title' placeholder="Your YouTube URL" name="youtubeUrl"
+                       [(ngModel)]="Listing.youtube"></ion-input>
+            <ion-input type="text" class='city-title' placeholder="Your Instagram URL" name="instagramUrl"
+                       [(ngModel)]="Listing.instagram"></ion-input>
+
+        </div>
+
+        <div class="social-content ion-padding" *ngIf="pricingPlans.includes('Tags/Keywords')">
+            <ion-label class="timing-label">Tags or keywords(Comma separated)</ion-label>
+            <ion-textarea type="text" class='desc-text' name="tags" rows="5" cols="20"
+                          placeholder="Enter tags or keywords comma separated." name="tags"
+                          [(ngModel)]="Listing.list_tags"></ion-textarea>
+
+        </div>
+
+        <div class="social-content ion-padding" *ngIf="pricingPlans.includes('Video')">
+            <ion-label class="city-label">Your Business video(Optional)</ion-label>
+            <ion-input type="text" class='city-title' name="videoLink"
+                       placeholder="https://youtube.com/watch?v=IFncZA5k_1k"
+                       [(ngModel)]="Listing.postVideo"></ion-input>
+
+        </div>
+
+        <div *ngIf="pricingPlans.includes('Image Gallery')">
+        <ion-label style="float: inherit;" class="city-label ion-padding-start">Images</ion-label>
+        <div class="img-upload-content ion-padding">
+
+
+            <div class="jFiler-input-dragDrop pos-relative">
+                <div class="jFiler-input-inner">
+                    <div class="jFiler-input-icon">
+                        <i class="icon-jfi-cloud-up-o"></i>
+                    </div>
+                    <div class="jFiler-input-text">
+                        <h3 style="margin:20px 0px;">Drop files here or click to upload</h3>
+                    </div>
+                    <ion-input type="text" [(ngModel)]="imgType" hidden></ion-input>
+                    <a class="jFiler-input-choose-btn blue" (click)="selectImage(imgType)">Browse Files</a>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="images">
+                <div class="column" *ngFor="let img of images; index as pos">
+
+                    <img [src]="img.path" style="width:100%"/>
+                    <a class="delete" (click)="deleteImage(img, pos)"><i class="fa fa-trash"></i></a>
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+        <div class="social-content ion-padding">
+            <ion-label class="business-logo-label">Upload Featured Image</ion-label>
+            <div>
+                <ion-input type="text" [(ngModel)]="ftrdImg" hidden></ion-input>
+                <label class="b-logo-img-label" (click)="selectImage(ftrdImg)"><p>
+
+                    Browse</p><span>Choose a file…</span><span *ngIf="featuredImage"><span
+                        *ngFor="let img of  featuredImage">{{img.name}}</span></span></label>
+            </div>
+        </div>
+        <div class="social-content ion-padding" style="margin-top: 5px;">
+            <ion-label class="business-logo-label">Upload Business Logo</ion-label>
+
+            <div>
+                <ion-input type="text" [(ngModel)]="banner" value="BannerImgs" hidden></ion-input>
+                <label class="b-logo-img-label" (click)="selectImage(banner)"><p>
+
+                    Browse</p><span>Choose a file…</span><span *ngIf="banners"><span
+                        *ngFor="let banner of banners">{{banner.name}}</span></span></label>
+            </div>
+
+        </div>
+
+        <div class="cred-content">
+            <div *ngIf="!userData">
+                <div *ngIf="fieldsStatus == false" class="ion-margin">
+                    <label class="input-email">Enter email to signup &amp; recieve notification upon listing
+                        approval</label>
+
+                    <input type="email" class="city-title" name="contactEmail" placeholder="your contact email"
+                           [(ngModel)]="Listing.email">
+                </div>
+                <div *ngIf="fieldsStatus == true" class="cred-content ion-margin">
+
+                    <ion-label class="city-label">Email</ion-label>
+                    <ion-input type="email" class='city-title'
+                               placeholder="Email"></ion-input>
+
+                    <ion-label class="city-label">Password</ion-label>
+                    <ion-input type="password" class='city-title'
+                               placeholder="Password"></ion-input>
+                </div>
+                <div class="account-cnfrm">
+                    <ion-checkbox type="checkbox" (ionChange)="checkStatus($event)"></ion-checkbox>
+                    <label class="already-account">Already Have
+                        Account?</label></div>
+            </div>
+            <label class="review-label">Click below to review your listing.</label>
+
+            <input type="submit" (click)="addListing()" value="Save &amp; Preview"
+                   class="lp-secondary-btn btn-first-hover">
+        </div>
+    </div>
+
+</ion-content>

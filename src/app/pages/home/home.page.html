@@ -1,0 +1,311 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<ion-app>
+
+    <ion-content class="ion-padding-bottom">
+        <ion-refresher [pullMax]="250" slot="fixed" (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+        <div class="header-item" [ngStyle]="{'padding-bottom': headerpadding}">
+            <div class="page-overlay"></div>
+            <ion-buttons class="side-menu-navigate" slot="start">
+                <ion-menu-button style="--color: white"></ion-menu-button>
+            </ion-buttons>
+            <img src="../../assets/listing-logo.png" style="position: relative;
+                  z-index: 1;" [routerLink]="'/home'" (click)="closeDashbrd()"/>
+            <i *ngIf="!userdata" class="fa fa-user-circle-o dta-user logouticon" (click)="loadLogin()"></i>
+            <span *ngIf="userdata" (click)="openUserDashboard()" class="drp-data">
+
+                <i class="fa fa-user-circle-o dta-user"></i>
+                <i class="fa fa-angle-down" aria-hidden="true">
+
+                </i>
+            </span>
+            <ion-list *ngIf="dashHide == true" class="lp-user-menu">
+                <ion-item (click)="gotoDash()">Dashboard</ion-item>
+                <!--                <ion-item>Update Profile</ion-item>-->
+                <ion-item (click)="signout()">Sign out</ion-item>
+            </ion-list>
+            <div style="clear: both;"></div>
+            <div style="margin-top: 30px;">
+
+                <ion-item [ngStyle]="{'margin': margin}">
+                    <ion-label>What</ion-label>
+                    <ion-input style="margin-left: 5px;
+                 line-height: 19px;" placeholder="Ex: food,service,barber,hotel" [(ngModel)]="selectedCat"
+                               (click)="hideSearch()"></ion-input>
+
+                </ion-item>
+
+                <div *ngIf="srchhide == true">
+                    <ion-item style="position: relative">
+
+                        <ion-label>Where</ion-label>
+                        <ion-input placeholder="Your City" [(ngModel)]="selectedLoc" (click)="locSearch()"></ion-input>
+                    </ion-item>
+                    <ion-list [hidden]="categoryDropDown.length == 0" class="search-bar-scroll">
+                        <ion-item *ngFor="let item of categoryDropDown" (click)="selectSearchResult(item)" tappable>
+                            {{ replaceSign(item.name) }}
+                        </ion-item>
+
+                    </ion-list>
+                    <ion-list *ngIf="lochide == true" [hidden]="selectLoc.length == 0" class="search-bar-scroll">
+                        <ion-item *ngFor="let item of selectLoc" (click)="selectSearchLoc(item)" tappable>
+                            {{ replaceSign(item.name) }}
+                        </ion-item>
+
+                    </ion-list>
+
+
+                </div>
+                <ion-button class="send-btn" (click)="searchItem()" expand="block" [ngStyle]="{'margin': margin}">
+                    <ion-icon name="search"></ion-icon>
+                    Search
+                </ion-button>
+            </div>
+
+            <!--            <ion-searchbar ></ion-searchbar>-->
+        </div>
+        <div *ngIf="srchhide==false" (click)="closeDashbrd()">
+            <div>
+                <ion-slides *ngIf="categories" class="ion-margin-top" [options]="catsix">
+                    <ion-slide style="margin-left: 5px;" *ngFor="let cat of categories">
+                        <div class="category" (click)="gotoCatDetails(cat)">
+                    <span class="cat-img">
+                 <img class="cat-img-s" src="{{categoryImgs[0].img}}"> </span>
+                            <p class="cat-name">{{replaceSign(cat.name)}}</p>
+                        </div>
+                    </ion-slide>
+                </ion-slides>
+                <div *ngIf="!categories" class="error-text ion-margin-top">
+                    <ion-text>
+                        There are no Categories to show
+                    </ion-text>
+                </div>
+            </div>
+
+            <div>
+                <div *ngIf="exculsive">
+                    <div *ngIf="loadStatus== 'success'">
+                        <h2 class="title-header">Exclusive</h2>
+                        <div class="lp-sub-title">Popular Exclusive Listings In Our Directory</div>
+                        <ion-slides style="margin-top: 16px;" [options]="exclusivepos">
+
+                            <ion-slide *ngFor="let excl of exculsive" (click)="gotoDetails(excl.id)">
+                                <div class="thumb-overlay"></div>
+                                <img class="ex-img" src="{{excl.featuredImage[0]}}"/>
+
+
+                                <div class="fields-pos">
+                    <span class="icon-pos-c">
+                        <i class="fa fa-heart-o" *ngIf="!isFavourite(excl.title)" aria-hidden="true"></i>
+                    <i class="fa fa-heart" *ngIf="isFavourite(excl.title)" aria-hidden="true"></i></span>
+                                    <div *ngIf="excl.rating">
+                                        <div *ngIf="excl.rating < 3.0">
+                                            <span class="listings-rating-danger"><i class="fa fa-star"
+                                                                                    aria-hidden="true"></i> {{excl.rating}}</span>
+                                        </div>
+                                        <div *ngIf="excl.rating >= 3.0">
+                        <span class="listings-rating"><i class="fa fa-star"
+                                                         aria-hidden="true"></i> {{excl.rating}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="content-main">
+                                        <span class="add-btn">Ad</span>
+                                        <div *ngFor="let cat of excl.category">
+                                            <p class="ex-cat">{{replaceSign(cat.name)}}</p>
+                                        </div>
+                                        <div>
+                                            <span class="ex-title">{{excl.title}}</span>
+                                            <span class="claimed" *ngIf="excl.claimed == 'claimed'"><i
+                                                    class="fa fa-check"></i></span>
+                                        </div>
+                                        <div class="bottom-text">
+                            <span class="lp-exc-loc" *ngFor="let loc of excl.location">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                                {{loc.name}}</span>
+                                            <span class="lp-exc-contact"><i class="fa fa-phone"
+                                                                            aria-hidden="true"></i>
+                            Call Now</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </ion-slide>
+
+                        </ion-slides>
+
+                    </div>
+                    <div *ngIf="loadStatus == 'failed'">
+                        <app-skelten></app-skelten>
+                    </div>
+                </div>
+                <div *ngIf="!exculsive" class="error-text ion-margin-top">
+                    <ion-text>
+                        There are no Exclusive Listings to show
+                    </ion-text>
+                </div>
+            </div>
+
+
+            <div style="margin-top: 70px;">
+                <h2 class="title-header">Happening Cities</h2>
+                <p class="lp-sub-title">Cities You Must Explore This Summer</p>
+                <ion-slides class="populr-items-slider" [options]="locpos">
+                    <ion-slide *ngFor="let loc of locfilter" (click)="gotoLocationDetails(loc)">
+                        <div class="category">
+
+                            <img class="loc-img-s" src="{{loc.locationPic}}"/>
+                            <p class="listing-loc">{{loc.name}}</p>
+                            <p style="font-size: 12px; margin: 0px">{{loc.NumbrOfListings}} listings</p>
+                        </div>
+                    </ion-slide>
+                </ion-slides>
+                <div *ngIf="!locfilter" class="error-text ion-margin-top">
+                    <ion-text>
+                        There are no Locations to show
+                    </ion-text>
+                </div>
+            </div>
+            <div style="margin-top: 45px;" *ngIf="loadStatus == 'success'">
+                <h2 class="title-header">News & Tips</h2>
+                <div class="news-head">
+                    <ion-slides *ngIf="news">
+                        <ion-slide *ngFor="let list of news" (click)="gotoNewsDetails(list.id)">
+                            <div class="news-container">
+                                <img [src]="list.featuredImage[0]">
+
+
+                                <div class="news-content">
+                                    <div class="lp-blog-user-thumb">
+                                        <img [src]="list.author_img">
+                                    </div>
+                                    <div *ngFor="let catg of list.post_category" class="cat-news">
+                                        <p>{{catg.name}}</p>
+                                    </div>
+                                    <div class="news-title">
+                                        <h4>{{list.title}}</h4>
+                                    </div>
+                                    <ul class="lp-blog-grid-author">
+                                        <li><i class="fa fa-user"></i>
+                                            <span>{{list.author_name}}</span></li>
+                                        <li>
+                                            <i class="fa fa-calendar"></i>
+                                            <span>{{list.Month}} {{list.Day}}, {{list.Year}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ion-slide>
+                    </ion-slides>
+                    <div *ngIf="!news" class="error-text ion-margin-top">
+                        <ion-text>
+                            There are no News to show
+                        </ion-text>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="loadStatus == 'failed'">
+                <app-skelten></app-skelten>
+            </div>
+            <div class="tabs-layout">
+                <ion-segment [(ngModel)]="tabs" scrollable="true">
+                    <div *ngFor="let cat of catgNames">
+                        <ion-segment-button [value]="replaceSign(cat.name)" (click)="getListinData(cat.term_id)">
+                            {{replaceSign(cat.name)}}
+                        </ion-segment-button>
+                    </div>
+                </ion-segment>
+
+
+                <div [ngSwitch]="tabs">
+                    <div *ngFor="let cat of catgNames">
+                        <div *ngSwitchCase="replaceSign(cat.name)">
+                            <div *ngIf="listingData">
+                                <ion-slides *ngIf="loadStatus == 'success'">
+                                    <ion-slide *ngFor="let hotels of listingData"
+                                               routerDirection="forward" (click)="gotoDetails(hotels.id)">
+                                        <ion-card class="hotels-items">
+
+                                            <div class="tabs-upper-content">
+                                                <img *ngIf="hotels.featuredImage[0]" src="{{hotels.featuredImage[0]}}"
+                                                     style="width: 100%;"/>
+                                                <img *ngIf="!hotels.featuredImage[0]" src="../../assets/placeholder.png"
+                                                     style="width: 100%;"/>
+                                                <span class="icon-pos-c">  <i *ngIf="!isFavourite(hotels.title)"
+                                                                              class="fa fa-heart-o"
+                                                                              aria-hidden="true"></i>
+                                                <i *ngIf="isFavourite(hotels.title)"
+                                                   class="fa fa-heart"
+                                                   aria-hidden="true"></i></span>
+                                                <div class="rating-content" *ngIf="hotels.rating">
+                                                    <span *ngIf="hotels.rating < 3.0"
+                                                          class="down-listings-rating-danger"><i
+                                                            class="fa fa-star" aria-hidden="true"></i> {{hotels.rating}}</span>
+                                                    <span *ngIf="hotels.rating >= 3.0" class="down-listings-rating"><i
+                                                            class="fa fa-star"
+                                                            aria-hidden="true"></i> {{hotels.rating}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listin-content">
+
+                                                <div *ngFor="let cat of hotels.category">
+                                                    <p class="ex-cat">{{replaceSign(cat.name)}}</p>
+                                                </div>
+                                                <p class="ex-title">
+                                                    {{replaceString(hotels.title)}}</p>
+                                                <div class="bottom-text">
+                                                <span class="lp-exc-loc" *ngFor="let loc of hotels.location"> <i
+                                                        class="fa fa-map-marker"
+                                                        aria-hidden="true"></i> {{loc.name}}</span>
+                                                    <span class="lp-exc-contact"><i class="fa fa-phone"
+                                                                                    aria-hidden="true"></i>
+                                                Call Now</span>
+                                                </div>
+                                            </div>
+
+                                        </ion-card>
+                                    </ion-slide>
+                                </ion-slides>
+                            </div>
+                            <div *ngIf="!listingData" class="error-text ion-margin-top">
+                                <ion-text>
+                                    There are no Listings in this Category
+                                </ion-text>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!catgNames" class="error-text ion-margin-top">
+                    <ion-text>
+                        There is Nothing to show
+                    </ion-text>
+                </div>
+            </div>
+            <div *ngIf="loadStatus == 'failed'">
+                <app-skelten></app-skelten>
+            </div>
+        </div>
+    </ion-content>
+    <ion-footer>
+        <div class="footer-app-view-new">
+            <div class="footer-center-btn">
+                <div class="center-btn-icon">
+
+                    <img src="../../assets/srch-btn.png" height="68" width="118"/></div>
+            </div>
+            <!--            <div class="ion-right-btn" routerLink="/contact" routerDirection="forward">-->
+            <!--                <i class="fa fa-envelope"></i>-->
+            <!--                Message-->
+            <!--            </div>-->
+            <ion-fab class="fab-home" horizontal="end" vertical="center" slot="fixed">
+                <ion-fab-button (click)="addListing()" color="primary">
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+            </ion-fab>
+        </div>
+    </ion-footer>
+</ion-app>
+
