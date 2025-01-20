@@ -65,7 +65,7 @@
     "ngx-image-cropper": "^2.0.2",
     "rxjs": "^6.5.4",
     "tslib": "^1.9.0",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.801.2",
