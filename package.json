@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@ionic-native/base64": "^5.19.0",
-    "@ionic-native/camera": "^5.19.0",
+    "@ionic-native/camera": "^5.36.0",
     "@ionic-native/core": "^5.19.0",
     "@ionic-native/dialogs": "^5.19.0",
     "@ionic-native/email-composer": "^5.19.0",
